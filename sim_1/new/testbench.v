@@ -1,11 +1,11 @@
-`timescale 1ns / 1ps
+`timescale 1ns / 1ns
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
 // 
-// Create Date: 01/29/2019 07:04:20 AM
+// Create Date: 01/29/2019 07:51:58 AM
 // Design Name: 
-// Module Name: testbench
+// Module Name: SevenSegmentTest
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,14 +20,33 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module testbench(
+module SevenSegmentTest;
+
+reg [7:0] sw;
+reg       clk;
+
+wire [6:0] seg;
+wire [3:0] an;
+
+SevenSegmentTop DUT (
+        .seg(seg),
+        .an(an),
+        .sw(sw)
     );
-    reg clkin;
-    wire clkout;    
-    ClockDivider DUT(.clkin(clkin), .clkout(clkout));
-    initial begin
-        clkin = 0;
-        
-        forever #10 clkin = ~clkin;
-    end
+initial begin
+
+sw = 0;
+clk = 0;
+
+#100;
+forever #10 clk = ~clk;
+
+end
+
+always @(posedge clk) begin
+        if (sw >= 9)
+                sw <= 0;
+        else
+                sw <= sw + 1;
+   end
 endmodule
